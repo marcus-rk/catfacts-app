@@ -16,18 +16,30 @@ import kotlinx.coroutines.withContext
 
 class CatFactsViewModel : ViewModel() {
     private val catFactsRepository = CatFactsRepository();
-    var currentCatFactString: String by mutableStateOf("Press the button to get a cat fact!")
+    var currentCatFactString: String by mutableStateOf("Press the button NEXT to get a cat fact!")
         private set;
+
+    var likedCatFacts: MutableList<CatFact> by mutableStateOf(mutableStateListOf())
+
+    lateinit var currentCatFact: CatFact
+        private set;
+
 
     fun getRandomFact() {
         viewModelScope.launch {
             try {
                 val data = withContext(Dispatchers.IO) {
-                    currentCatFactString = catFactsRepository.getCatFact().fact
+                    currentCatFact = catFactsRepository.getCatFact()
+                    currentCatFactString = currentCatFact.fact
                 }
             } catch (e: Exception) {
                 currentCatFactString = e.message.toString()
             }
         }
     }
+
+    fun likeCatFact() {
+        likedCatFacts.add(currentCatFact)
+    }
+
 }
