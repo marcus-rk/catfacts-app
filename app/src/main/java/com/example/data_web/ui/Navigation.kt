@@ -13,7 +13,7 @@ fun Navigation() {
 
     NavHost(navController = navController, startDestination = "welcome") {
         composable("welcome"){
-            Welcome()
+            Welcome(onNextScreen = {navController.navigate("catFact")})
         }
         composable("catFact"){
             CatFactScreen()
